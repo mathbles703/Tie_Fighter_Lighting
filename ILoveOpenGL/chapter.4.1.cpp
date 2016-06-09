@@ -385,13 +385,6 @@ void RenderFunction(void)
 	::g_vecLights[3].position.z = ::g_vec_pGOs[0]->position.z + 0.55f;
 
 
-	//testing for shooting
-	//::g_vec_pBullets[0]->position = glm::vec3(::g_vecLights[2].position.x,
-	//	::g_vecLights[2].position.y,
-	//	::g_vecLights[2].position.z);
-	//
-	//DrawObject(::g_vec_pBullets[0]);
-
   for (std::vector< cGameObject* >::iterator itGO = ::g_vec_pGOs.begin();
 	  itGO != ::g_vec_pGOs.end(); itGO++)
   {
@@ -436,8 +429,8 @@ void RenderFunction(void)
 
 void HandleIO(void)
 {
+	::g_vec_pGOs[0]->velocity = glm::vec3(0.0f, 0.0f, 0.0f);
 	// Super Meat Boy...
-	::g_vec_pGOs[0]->velocity = glm::vec3(0.0f);
 	//::g_vec_pBullets[0]->velocity = glm::vec3(0.0f);
 	::g_vecLights[0].attenQuad = 20.0f;
 	::g_vecLights[1].attenQuad = 20.0f;
@@ -534,13 +527,30 @@ void HandleIO(void)
 		{
 			::g_vec_pGOs[0]->velocity.y = -2.0f;	bBunnyMoved = true;
 		}
-		if ((GetAsyncKeyState('M') & 0x8000) != 0)
-		{
-			::g_vec_pBullets[0]->velocity.x = +2.0f;
-		}
 		if ((GetAsyncKeyState('N') & 0x8000) != 0)
 		{
-			::g_vecLights[0].attenQuad = 6.0f;
+			//cGameObject* pBullet1 = new cGameObject();
+			//pBullet1->modelName = "assets/models/Isoshphere.ply";
+			//pBullet1->scale = 0.1f;
+			//pBullet1->bUseDebugColour = true;
+			//pBullet1->diffuse = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
+			//pBullet1->debugColour = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
+			for (int i = 0; i < 2; i++)
+			{
+				cGameObject* pBullet1 = new cGameObject();
+				pBullet1 = g_vec_pBullets[i];
+
+			pBullet1->position = glm::vec3(::g_vecLights[2+i].position.x,
+				::g_vecLights[2+i].position.y,
+				::g_vecLights[2+i].position.z);
+
+			pBullet1->velocity.x = 0.2f;	
+			g_vec_pGOs.push_back(pBullet1);
+			}
+
+			//::g_vecLights[2].diffuse = glm::vec4(0.0f, 0.0f, 0.0f, 0.0f);
+
+			//std::cout << "Bullet position: " << g_vec_pGOs[4]->position.x << std::endl;
 		}
 		if ( bBunnyMoved )
 		{
@@ -573,17 +583,6 @@ void IdleFunction(void)
 
 	// Get elapsed secs since last idle (likely 0.1 ms)
 	float deltaTime = g_AniTimer.GetElapsedSeconds( true );
-
-	cGameObject* pBullet = 0;
-	for (std::vector< cGameObject* >::iterator itB = ::g_vec_pBullets.begin();
-		itB != ::g_vec_pBullets.end(); itB++)
-	{
-		pBullet = *itB;
-
-		pBullet->velocity += pBullet->accel * deltaTime;
-		pBullet->position += pBullet->velocity * deltaTime;
-	}
-
 
 	// This is technically "Explicit forward Euler integration"
 	cGameObject* pCurGO = 0;
@@ -1291,8 +1290,8 @@ void CreateTheObjects(void)
 	pBullet1->modelName = "assets/models/Isoshphere.ply";
 	pBullet1->scale = 0.4f;
 	pBullet1->bUseDebugColour = true;
-	pBullet1->diffuse = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
-	pBullet1->debugColour = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
+	pBullet1->diffuse = glm::vec4(1.0f, 0.0f, 1.0f, 1.0f);
+	pBullet1->debugColour = glm::vec4(1.0f, 0.0f, 1.0f, 1.0f);
 
 	cGameObject* pBullet2 = new cGameObject();
 	pBullet2->modelName = "assets/models/Isoshphere.ply";
@@ -1301,8 +1300,8 @@ void CreateTheObjects(void)
 	pBullet2->diffuse = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
 	pBullet2->debugColour = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
 
-	::g_vec_pBullets.push_back(pBullet1);
-	::g_vec_pBullets.push_back(pBullet2);
+	g_vec_pBullets.push_back(pBullet1);
+	g_vec_pBullets.push_back(pBullet2);
 
 	// Tie is object zero 
 	cGameObject* pTieFighter = new cGameObject();
@@ -1354,6 +1353,9 @@ void CreateTheObjects(void)
 	::g_vec_pGOs.push_back( pMig );
 	::g_vec_pGOs.push_back( pGround );
 
+	//::g_vec_pGOs.push_back(pBullet1);
+	//::g_vec_pGOs.push_back(pBullet2);
+
 	// Assume the lights are loaded into the g_vecLights;
 	::g_vecLights[0].position = glm::vec4( 0.0f, 3.0f, 0.0f, 1.0f );
 	::g_vecLights[0].diffuse =glm::vec4( 0.0f, 1.0f, 0.0f, 1.0f );
@@ -1387,6 +1389,9 @@ void CreateTheObjects(void)
 	::g_vecLights[3].attenConst = 0.0f;
 	::g_vecLights[3].attenLinear = 0.0f;
 	::g_vecLights[3].attenQuad = 50.0f;
+
+
+
 
 	return;
 }
