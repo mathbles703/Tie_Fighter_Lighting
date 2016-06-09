@@ -1,0 +1,30 @@
+Week 6, Day 1
+
+- Shows a possible "light class"
+  - you set values in the lights in the vectors (at any point in the code)
+  - another function loads the values into the uniforms (in the render call)
+
+- Also shows a debug function to help manage attenuation
+  - In class, this has a linear scan through the values (which is sure fast enough)
+  - After class, I added a "Newton-Raphson" type search, sort of like a binary search
+    (Note: you *don't* have to know this, but it's interesting, and MUCH faster:
+     11-16 steps per "sphere" instead of around 60,000 steps, so 4,000 to 5,000 TIMES faster.
+     What's also interesting is the "slow" way isn't even noticeable)
+
+- Light #1 is moving with the tie fighter
+  - You set the position of the light to the location (and an offset) of the tie fighter
+  - Note that this is done in the Render, not the Idle. This is because the Idle might not 
+    be called every time the render is - normally you'd place the movement updates in the Idle 
+    (or on another thread)
+
+Controls: 
+
+WSAD,QE
+* Moves object #0
+* <CRTL> moves "selected" light
+* plus "+" and minus "-" changes selected light
+* 1,2 - linear attenuation up and down
+* 3,4 - quadratic attenuation up and down
+* "(" and ")" turns on and off the "debug spheres"
+* The title screen shows the currently selected light, the position, and the linear and quad atten
+
