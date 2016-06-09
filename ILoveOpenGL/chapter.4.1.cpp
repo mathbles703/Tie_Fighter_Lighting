@@ -139,7 +139,7 @@ int main(int argc, char* argv[])
   CreateTheObjects();
 
   ::g_cam_at = glm::vec3( 0.0f, 0.0f, 0.0f );
-  ::g_cam_eye = glm::vec3( 0.0f, 0.0f, 10.0f );
+  ::g_cam_eye = glm::vec3( 0.0f, 2.0f, 10.0f );
 
   g_AniTimer.Reset( );
   g_AniTimer.Start( );
@@ -535,6 +535,7 @@ void HandleIO(void)
 			//pBullet1->bUseDebugColour = true;
 			//pBullet1->diffuse = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
 			//pBullet1->debugColour = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
+
 			for (int i = 0; i < 2; i++)
 			{
 				cGameObject* pBullet1 = new cGameObject();
@@ -544,14 +545,31 @@ void HandleIO(void)
 				::g_vecLights[2+i].position.y,
 				::g_vecLights[2+i].position.z);
 
-			pBullet1->velocity.x = 0.2f;	
+			pBullet1->velocity.x = 1.5f;	
 			g_vec_pGOs.push_back(pBullet1);
 			}
 
-			//::g_vecLights[2].diffuse = glm::vec4(0.0f, 0.0f, 0.0f, 0.0f);
+			::g_vecLights[2].diffuse = glm::vec4(0.0f, 0.0f, 0.0f, 1.0f);
+			::g_vecLights[2].ambient = glm::vec4(0.0f, 0.0f, 0.0f, 1.0f);
+			::g_vecLights[2].specular = glm::vec4(0.0f, 0.0f, 0.0f, 1.0f);
+
+			::g_vecLights[3].diffuse = glm::vec4(0.0f, 0.0f, 0.0f, 1.0f);
+			::g_vecLights[3].ambient = glm::vec4(0.0f, 0.0f, 0.0f, 1.0f);
+			::g_vecLights[3].specular = glm::vec4(0.0f, 0.0f, 0.0f, 1.0f);
 
 			//std::cout << "Bullet position: " << g_vec_pGOs[4]->position.x << std::endl;
 		}
+		if ((GetAsyncKeyState('M') & 0x8000) != 0)
+		{
+			::g_vecLights[2].diffuse = glm::vec4(0.0f, 0.0f, 1.0f, 1.0f);
+			::g_vecLights[2].ambient = glm::vec4(0.0f, 0.0f, 0.2f, 1.0f);
+			::g_vecLights[2].specular = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
+
+			::g_vecLights[3].diffuse = glm::vec4(0.0f, 0.0f, 1.0f, 1.0f);
+			::g_vecLights[3].ambient = glm::vec4(0.0f, 0.0f, 0.2f, 1.0f);
+			::g_vecLights[3].specular = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
+		}
+
 		if ( bBunnyMoved )
 		{
 			std::cout << ::g_vec_pGOs[0]->position.x << ", " 
@@ -600,8 +618,6 @@ void IdleFunction(void)
 		//pCurGO->velocity.y += pCurGO->accel.y * deltaTime;
 		//pCurGO->velocity.z += pCurGO->accel.z * deltaTime;
 	}
-
-
 
 	glutPostRedisplay();
 }
@@ -1288,14 +1304,14 @@ void CreateTheObjects(void)
 
 	cGameObject* pBullet1 = new cGameObject();
 	pBullet1->modelName = "assets/models/Isoshphere.ply";
-	pBullet1->scale = 0.4f;
+	pBullet1->scale = 0.2f;
 	pBullet1->bUseDebugColour = true;
 	pBullet1->diffuse = glm::vec4(1.0f, 0.0f, 1.0f, 1.0f);
 	pBullet1->debugColour = glm::vec4(1.0f, 0.0f, 1.0f, 1.0f);
 
 	cGameObject* pBullet2 = new cGameObject();
 	pBullet2->modelName = "assets/models/Isoshphere.ply";
-	pBullet2->scale = 0.4f;
+	pBullet2->scale = 0.2f;
 	pBullet2->bUseDebugColour = true;
 	pBullet2->diffuse = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
 	pBullet2->debugColour = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
